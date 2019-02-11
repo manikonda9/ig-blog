@@ -1,0 +1,42 @@
+[
+    {
+        "id":1,
+        "name":"Dinesh Paramathal Varadharajulu",
+        "email":"dinesh.p.v@infogain.com"
+    },
+    {
+        "id":2,
+        "name":"Jahangir Alam",
+        "email":"jahangir.alam@infogain.com"
+    },
+    {
+        "id":3,
+        "name":"Jeegar Shah",
+        "email":"jeegar.shah@infogain.com"
+    },
+    {
+        "id":4,
+        "name":"Milin Ashwin Kumar Dalal",
+        "email":"milin.dalal@infogain.com"
+    },
+    {
+        "id":5,
+        "name":"Minal Rajput",
+        "email":"minal.rajput@infogain.com"
+    },
+    {
+        "id":6,
+        "name":"Mohamed Thuppugar",
+        "email":"mohamed.thuppugar@infogain.com"
+    },
+    {
+        "id":7,
+        "name":"Murtaza Khan",
+        "email":"murtaza.khan@infogain.com"
+    },
+    {
+        "id":8,
+        "name":"Neil Fernandes",
+        "email":"Neil.fernandes@infogain.com"
+    }
+]
