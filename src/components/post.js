@@ -16,18 +16,18 @@ class Post extends React.Component {
             technology: "",
             phone: "",
             formNumber: "",
-            isEmpDisplay : false,
-            isTechDisplay : false,
-            employees : require("../utils/employees.json"),
-            technologies : require("../utils/technologies.json"),
-            searchValue : '',
-            searchTechValue:'',
-            items : [],
+            isEmpDisplay: false,
+            isTechDisplay: false,
+            employees: require("../utils/employees.json"),
+            technologies: require("../utils/technologies.json"),
+            searchValue: '',
+            searchTechValue: '',
+            items: [],
             taggedEmployees: [],
-            unTaggedEmployees : [],
-            techItems : [],
-            taggedTech:[],
-            unTaggedTech : []
+            unTaggedEmployees: [],
+            techItems: [],
+            taggedTech: [],
+            unTaggedTech: []
         }
 
         this.onhandleChange = this.onhandleChange.bind(this);
@@ -39,7 +39,7 @@ class Post extends React.Component {
         this.props.getData();
     }
 
-    tagPerson = (item,tag,untag,display) => {
+    tagPerson = (item, tag, untag, display) => {
         let data = this.state[untag];
         let taggedEmployees = this.state[tag];
         let currentIndex;
@@ -55,14 +55,14 @@ class Post extends React.Component {
                 ...state,
                 [untag]: data,
                 [tag]: taggedEmployees,
-                searchValue :'',
-                searchTechValue : '',
-                [display]:false
+                searchValue: '',
+                searchTechValue: '',
+                [display]: false
             }
         })
     }
 
-    unTagPerson = (item,tag,untag) => {
+    unTagPerson = (item, tag, untag) => {
         let data = this.state[tag];
         let unTaggedEmployees = this.state[untag];
         let currentIndex;
@@ -106,23 +106,24 @@ class Post extends React.Component {
         id = id.toLocaleString();
         id = id.replace(/[/,: ]/g, "");
 
+        let currentdate = new Date();
+        let created_at = currentdate.toISOString();
+
         let data = {
             answers: [],
-            id: id,
+            _id: id,
             title: this.state.title,
             question: this.state.description,
             code: this.state.query,
-            created_at: new Date(),
+            created_at: created_at,
             project: this.state.project,
-            tags: this.state.taggedTech.map(t=>t.name),
+            tags: this.state.taggedTech.map(t => t.name),
             status: 1,
             tagged_people: this.state.taggedEmployees,
             views: 0
         }
-
-        console.log(this.state.query);
         //dataRef.push().set(data);
-        //addQuery(data);
+        addQuery(data);
         //this.props.history.push("/dashboard");
 
     }
@@ -132,40 +133,40 @@ class Post extends React.Component {
             return {
                 ...state,
                 unTaggedEmployees: state.employees,
-                unTaggedTech : state.technologies
+                unTaggedTech: state.technologies
             }
         })
     }
 
-    search = (event,untag,display,search,item) =>{
+    search = (event, untag, display, search, item) => {
         let value = event.target.value;
         let data = this.state[untag];
         let items = [];
-        data.forEach((d)=>{
-            if(d.name.toLowerCase().indexOf(value) > -1){
+        data.forEach((d) => {
+            if (d.name.toLowerCase().indexOf(value.toLowerCase()) > -1) {
                 items.push(d);
             }
         })
-        if(value===""){
-            items=[]
+        if (value === "") {
+            items = []
         }
 
-        this.setState(state =>{
+        this.setState(state => {
             return {
                 ...state,
-                [item] : items,
-                [search] : value,
-                [display] : items.length>0?true:false
+                [item]: items,
+                [search]: value,
+                [display]: items.length > 0 ? true : false
             }
         })
     }
 
     render() {
-        const {items,isTechDisplay,isEmpDisplay,techItems} = this.state;
+        const { items, isTechDisplay, isEmpDisplay, techItems } = this.state;
         return (
             <section className="container">
                 <div className="post-section">
-                    
+                    <form onSubmit={this.postQueryData}>
                         <h2>Post Query</h2>
                         <div>
                             <input type="text" placeholder="Title" name="title"
@@ -179,10 +180,17 @@ class Post extends React.Component {
                                 onChange={this.onhandleChange}
                                 placeholder="Write description here ............."></textarea>
                         </div>
-                        <Editor className="editor"
+                        <div>
+                            <textarea cols="80" rows="6"
+                                name="query"
+                                value={this.state.query}
+                                onChange={this.onhandleChange}
+                                placeholder="Write query here ............."></textarea>
+                        </div>
+                        {/* <Editor className="editor"
                             content={this.state.query}
                             change={this.getEditordata}
-                        />
+                        /> */}
                         <div>
                             <select name="project"
                                 value={this.state.project}
@@ -197,35 +205,35 @@ class Post extends React.Component {
                             </select>
                         </div>
                         <div>
-                            <input type="text" placeholder="Search Technology for tagging" onChange={(e)=>this.search(e,"unTaggedTech","isTechDisplay","searchTechValue","techItems")} value={this.state.searchTechValue} />
+                            <input type="text" placeholder="Search Technology for tagging" onChange={(e) => this.search(e, "unTaggedTech", "isTechDisplay", "searchTechValue", "techItems")} value={this.state.searchTechValue} />
                             {techItems.length > 0 && isTechDisplay ? <div className="popup_body">
                                 {techItems.map((item, index) => {
                                     return (
-                                        <div key={index} className="tag_inner" onClick={this.tagPerson.bind(this, item,"taggedTech","unTaggedTech","isTechDisplay")}>{item.name}</div>
+                                        <div key={index} className="tag_inner" onClick={this.tagPerson.bind(this, item, "taggedTech", "unTaggedTech", "isTechDisplay")}>{item.name}</div>
                                     )
                                 })}
                             </div> : null}
                             <div>Tag Technology : {
                                 this.state.taggedTech.map((emp, index) => {
                                     return (
-                                        <span key={index} className="tag text-success p-1 m-1">{emp.name} <i className="fa fa-times-circle-o" onClick={this.unTagPerson.bind(this, emp,"taggedTech","unTaggedTech")} aria-hidden="true"></i></span>
+                                        <span key={index} className="tag text-success p-1 m-1">{emp.name} <i className="fa fa-times-circle-o" onClick={this.unTagPerson.bind(this, emp, "taggedTech", "unTaggedTech")} aria-hidden="true"></i></span>
                                     )
                                 })
                             }</div>
                         </div>
                         <div>
-                            <input type="text" placeholder="Search employee for tagging" onChange={(e)=>this.search(e,"unTaggedEmployees","isEmpDisplay","searchValue","items")} value={this.state.searchValue} />
+                            <input type="text" placeholder="Search employee for tagging" onChange={(e) => this.search(e, "unTaggedEmployees", "isEmpDisplay", "searchValue", "items")} value={this.state.searchValue} />
                             {items.length > 0 && isEmpDisplay ? <div className="popup_body">
                                 {items.map((item, index) => {
                                     return (
-                                        <div key={index} className="tag_inner" onClick={this.tagPerson.bind(this, item,"taggedEmployees","unTaggedEmployees","isEmpDisplay")}>{item.name}</div>
+                                        <div key={index} className="tag_inner" onClick={this.tagPerson.bind(this, item, "taggedEmployees", "unTaggedEmployees", "isEmpDisplay")}>{item.name}</div>
                                     )
                                 })}
                             </div> : null}
                             <div>Tag Peoples : {
                                 this.state.taggedEmployees.map((emp, index) => {
                                     return (
-                                        <span key={index} className="tag text-success p-1 m-1">{emp.name} <i className="fa fa-times-circle-o" onClick={this.unTagPerson.bind(this, emp,"taggedEmployees","unTaggedEmployees")} aria-hidden="true"></i></span>
+                                        <span key={index} className="tag text-success p-1 m-1">{emp.name} <i className="fa fa-times-circle-o" onClick={this.unTagPerson.bind(this, emp, "taggedEmployees", "unTaggedEmployees")} aria-hidden="true"></i></span>
                                     )
                                 })
                             }</div>
@@ -235,8 +243,9 @@ class Post extends React.Component {
                         </div>
                         <div className="action-btn">
                             <button type="reset" className="btn btn-secondary">Reset</button>
-                            <button type="submit" className="btn btn-success" onClick={this.postQueryData}>Submit</button>
+                            <button type="submit" className="btn btn-success">Submit</button>
                         </div>
+                    </form>
                 </div>
                 {this.state.isopen ? <Tagpopup toggle={this.togglePopup} tag={this.tagPerson} data={this.state.unTaggedEmployees} /> : null}
             </section>
