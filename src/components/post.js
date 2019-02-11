@@ -110,7 +110,17 @@ class Post extends React.Component {
         let created_at = currentdate.toISOString();
 
         let data = {
-            answers: [],
+            answers: [
+                {
+                    "id": 0,
+                    "name": "Wilder Holt",
+                    "likes":0,
+                    "code":"asdf",
+                    "helped":true,
+                    "solved":false,
+                    "answer": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro deleniti temporibus, ratione exercitationem voluptas eaque quos debitis eligendi, illum, doloremque laudantium corrupti? Expedita tempore aspernatur beatae dolore nobis vero praesentium."
+                  }
+            ],
             _id: id,
             title: this.state.title,
             question: this.state.description,
